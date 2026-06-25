@@ -8,7 +8,7 @@ class UploadResponse(BaseModel):
     message: int 
     
     
-class QueryReqeuest(BaseModel): 
+class QueryRequest(BaseModel): 
     session_id: str
     question: str = Field (..., min_length=1, max_length=1000)
     
@@ -25,6 +25,6 @@ class QueryResponse(BaseModel):
     session_id: str 
     
     
-class ErrorResponse(BaseModel): 
-    error: str 
+class ErrorResponse(BaseModel):
+    error: str
     details: str | None = None

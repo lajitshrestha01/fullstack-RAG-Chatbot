@@ -1,0 +1,6 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.analysis.extraPaths": ["${workspaceFolder}/backend"],
+  "python.analysis.autoSearchPaths": true,
+  "pylint.args": ["--rcfile=${workspaceFolder}/.pylintrc"]
+}
