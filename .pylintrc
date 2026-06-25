@@ -1,0 +1,18 @@
+[MAIN]
+disable=
+    C0303,  # trailing-whitespace
+    C0301,  # line-too-long
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    C0103,  # invalid-name
+    W0511,  # fixme
+    R0903,  # too-few-public-methods
+    R0913,  # too-many-arguments
+    R0914,  # too-many-locals
+    R0915,  # too-many-statements
+    R0801,  # duplicate-code
+    R1705,  # no-else-return
+    R1728,  # consider-using-generator
+    W0613,  # unused-argument
+    W0622,  # redefined-builtin

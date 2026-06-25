@@ -1,37 +1,46 @@
-
-import os 
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-class Settings(BaseSettings): 
+class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR / ".env"
-        env_file_encoding="utf-8"
-        extra="ignore"
-        )
-    
-    #APP 
+        env_file=Path(__file__).parent / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    # App
     APP_ENV: str = "development"
     DEBUG: bool = False
-    
-    #server
+
+    # Server
     HOST: str = "0.0.0.0"
     PORT: int = 8000
-    WORKER: int = 1
+
+    # OpenAI — embeddings + LLM
+    OPENAI_API_KEY: str
+    EMBED_MODEL: str = "text-embedding-3-small"
     
-    #nvidia embeddings 
-    
-    NVIDIA_API_KEY: str
-    NVIDIA_EMBED_MODEL: str = "nvidia/nv-embedcode-7b-v1"
-    NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
-    
-    #groq
+    #Groq -LLM inference 
     GROQ_API_KEY: str 
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
     GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
 
+    # ChromaDB — in-memory, no host/port/persist dir needed
+    CHROMA_COLLECTION_PREFIX: str = "session"  # collections named session_{id}
+
+    # Upload limits
+    MAX_UPLOAD_SIZE: int = 10_485_760   # 10MB
+    MAX_PDF_PAGES: int = 50
+    CHUNK_SIZE: int = 1000
+    CHUNK_OVERLAP: int = 200
+
+    # CORS
+    ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]
 
 
-    
+settings = Settings()
