@@ -5,7 +5,7 @@ class UploadResponse(BaseModel):
     filename: str
     pages: int 
     chunks_stored: int 
-    message: int 
+    message: str 
     
     
 class QueryRequest(BaseModel): 
@@ -16,7 +16,7 @@ class SourceChunk(BaseModel):
     content: str
     page: int 
     chunk_index: int 
-    releveance_score: float 
+    relevance_score: float 
     
     
 class QueryResponse(BaseModel): 

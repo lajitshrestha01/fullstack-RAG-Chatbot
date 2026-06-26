@@ -87,6 +87,9 @@ def process_pdf(pdf_bytes: bytes, filename: str) -> dict:
     The only function the controller calls for uploads.
     Takes raw bytes in, returns session_id + stats out.
     """
+    # Validate before touching anything
+    validate_pdf_bytes(pdf_bytes, filename)
+    
     pages = extract_text_by_page(pdf_bytes)
     logger.info("%s: %d pages extracted", filename, len(pages))
 
@@ -191,3 +194,34 @@ def query_llm(question: str, context: str) -> str:
     )
     return response.choices[0].message.content
     
+
+def validate_pdf_bytes(pdf_bytes: bytes, filename: str) -> None: 
+    """
+    Three layer file validtaion: 
+    1. Extnesion check - catches ovioues mistakes 
+    2. Magic bytes check - catches double extension attacks 
+    3. Actual parse attempt- Catches corrupt/fake pdf. 
+    
+    """
+    parts = filename.lower().split(".")
+    if len(parts) < 2 or parts[-1] != "pdf": 
+        raise ValueError(
+            f"Invalid filename '{filename}'. Must end with .pdf"
+        )
+        
+    PDF_MAGIC = b"%PDF-"
+    if not pdf_bytes[:5] == PDF_MAGIC: 
+        raise ValueError(
+            f"File '{filename}' is not a valid pdf."
+            f"Got magic bytes: {pdf_bytes[:5]!r}"
+        )
+    
+    try: 
+        reader = PdfReader(BytesIO(pdf_bytes))
+        if len(reader.pages) == 0: 
+            raise ValueError("pdf has no pages")
+        
+    except Exception as exc: 
+        raise ValueError(
+            f"file '{filename}' could not be parsed as pdf: {exc}"
+        ) from exc

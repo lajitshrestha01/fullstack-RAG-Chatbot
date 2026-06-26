@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
+from routers.document_router import router as document_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("app")
@@ -29,3 +30,6 @@ app.add_middleware(
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+app.include_router(document_router)
+
