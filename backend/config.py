@@ -26,8 +26,9 @@ class Settings(BaseSettings):
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
     GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
 
-    # ChromaDB — in-memory, no host/port/persist dir needed
-    CHROMA_COLLECTION_PREFIX: str = "session"  # collections named session_{id}
+   #postgress Neon database URL:
+    DATABASE_URL: str
+    DATABASE_URL_SYNC: str  # psycopg2 URL for alembic migrations
 
     # Upload limits
     MAX_UPLOAD_SIZE: int = 10_485_760   # 10MB
@@ -36,7 +37,7 @@ class Settings(BaseSettings):
     CHUNK_OVERLAP: int = 200
 
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+    ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000,"
 
     @property
     def allowed_origins_list(self) -> list[str]:

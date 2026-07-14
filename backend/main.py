@@ -6,14 +6,19 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from routers.document_router import router as document_router
+from sqlalchemy import text
+from db.database import engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("app")
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    logger.info("Server starting up -chromaDb running in-memory")
+    async with engine.connect() as conn: 
+        await conn.execute(text('SELECT 1'))
+    logger.info("Database connected")
     yield
+    await engine.dispose()
     logger.info("Server Shutting down")
 
 
@@ -31,5 +36,5 @@ app.add_middleware(
 async def health():
     return {"status": "ok"}
 
-app.include_router(document_router)
+# app.include_router(document_router)
 
